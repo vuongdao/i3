@@ -37,41 +37,55 @@ TEXT
 [{"full_text": "\
 ${if_updatenr 1}host: ${exec hostname}${endif}\
 ${if_updatenr 2}kernel: ${exec uname -r}$endif}\
-${if_updatenr 3}distro: ${exec lsb_release -d -s | sed 's/"//g'} (${exec lsb_release -r -s})${endif}\
 ${if_updatenr 4}up: ${uptime}${endif}\
 ", "color":"\#DCDCCC"},
 
-#net
-{"full_text": " net:", "separator": false, "separator_block_width":3},
-{"full_text": "${wireless_essid enp0s3}", "separator":false, "separator_block_width":3, "color":"\#dca3a3"},
-{"full_text": "${addr enp0s3}", "color":"\#83b3a3", "separator":true, "separator_block_width":3},
-#{"full_text": "|", "separator":false, "separator_block_width":3},
-#{"full_text": "${exec /home/paul/bin/external-ip}", "color":"\#7f9f7f"},
+# Music
+${if_match "Playing" == "$mpd_status"}
+{"full_text":"♪","separator":false,"separator_block_width":8},
+{"full_text":"$mpd_artist - $mpd_title","color":"\#83b3a3","separator_block_width":8},
+$endif
+
+
+#network:
+${if_up enp0s25}
+{"full_text":"lan:","separator":false,"separator_block_width":8},
+{"full_text":"${addr enp0s25}","color":"\#83b3a3","separator_block_width":8},
+${endif}
+
+${if_up wlp2s0}
+{"full_text":"wlan","separator":false,"separator_block_width":8},
+{"full_text":"${wireless_essid wlp2s0} ${addr wlp2s0} ${wireless_bitrate wlp2s0}","color":"\#83b3a3","separator":false,"separator_block_width":8},
+${endif}
 
 #memory
-{"full_text": " mem:", "separator": false, "separator_block_width":3},
-{"full_text": "${memperc}%", "min_width":"000%", "separator": false, "separator_block_width":3, "color":"${if_match ${memperc} < 33}\#7f9f7f${else}${if_match ${memperc} > 66}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
+{"full_text": "mem:", "separator": false, "separator_block_width":8},
+{"full_text": "${memperc}%", "min_width":"000%", "separator": false, "separator_block_width":3, "color":"${if_match ${memperc} < 33}\#7f9f7f${else}${if_match ${memperc} > 88}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
 {"full_text": "${mem}/${memmax}", "color":"\#83b3a3"},
 
 #cpu
-{"full_text": " cpu:", "separator": false, "separator_block_width":3},
-{"full_text": "${cpu}%", "min_width":"000%", "separator": false, "separator_block_width":3, "color":"${if_match ${cpu} < 33}\#7f9f7f${else}${if_match ${cpu} > 66}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
+{"full_text": "cpu:", "separator": false, "separator_block_width":8},
+{"full_text": "${cpu}%", "min_width":"000%", "separator": false, "separator_block_width":3, "color":"${if_match ${cpu} < 33}\#7f9f7f${else}${if_match ${cpu} > 88}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
 {"full_text": "${exec awk '{print $1}' /proc/loadavg}", "separator": false, "separator_block_width":3, "color":"${if_match ${exec awk '{print $1}' /proc/loadavg} < 1.0}\#7f9f7f${else}${if_match ${exec awk '{print $1}' /proc/loadavg} > 3.0}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
 {"full_text": "${exec awk '{print $2}' /proc/loadavg}", "separator": false, "separator_block_width":3, "color":"${if_match ${exec awk '{print $2}' /proc/loadavg} < 1.0}\#7f9f7f${else}${if_match ${exec awk '{print $2}' /proc/loadavg} > 3.0}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
 {"full_text": "${exec awk '{print $3}' /proc/loadavg}", "color":"${if_match ${exec awk '{print $3}' /proc/loadavg} < 1.0}\#7f9f7f${else}${if_match ${exec awk '{print $3}' /proc/loadavg} > 3.0}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
 
-#Battery
-#{"full_text": "bat:", "separator": false, "separator_block_width":3},
-#{"full_text": "${battery_percent BAT0}%", "min_width":"000%", "color":"${if_match ${battery_percent BAT0} > 66}\#7f9f7f${else}${if_match ${battery_percent BAT0} < 33}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
-#Disk
-{"full_text": " disk:","separator": false, "separator_block_width":3},
-{"full_text": "/ ${fs_used /}/${fs_size /} , home: ${fs_used /home}/${fs_size /home}", "color":"\#83b3a3"},
+#disk
+{"full_text":"root:","separator":false,"separator_block_width":8},
+{"full_text":"${fs_used /}/${fs_size /}","color":"\#83b3a3","separator":false,"separator_block_width":8},
+{"full_text":"home:","separator":false,"separator_block_width":8},
+{"full_text":"${fs_used /home}/${fs_size /home}","color":"\#83b3a3","separator_block_width":8},
 
-#volume
-{"full_text": " vol:", "separator": false,"separator_block_width":3},
-{"full_text":"${exec amixer get Master |grep % |awk '{print $5}'|sed 's/[^0-9\%]//g' | head -n 1} ","color":"\#83b3a3"},
+# Volume:
+{"full_text": "vol:","separator":false,"separator_block_width":3},
+{"full_text":"${exec amixer get Master -M | grep -oE "[[:digit:]]*%"}","color":"\#83b3a3","separator_block_width":8},
 
 #time
-{"full_text": " ${time %d/%m}", "separator": false, "separator_block_width":3, "color":"\#ffcfaf"},
-{"full_text": " ${time %H:%M}"}
+{"full_text": "${time %d-%m-%Y}", "separator": false, "separator_block_width":8, "color":"\#ffcfaf"},
+{"full_text": "${time %H:%M}"}
+
+#Battery
+#{"full_text": "bat:", "separator": false, "separator_block_width":3},
+#{"full_text": "${battery_percent BAT0}%", "min_width":"000%", "color":"${if_match ${battery_percent BAT0} > 88}\#7f9f7f${else}${if_match ${battery_percent BAT0} < 33}\#dca3a3${else}\#c3bf9f${endif}${endif}"},
 ],
+
