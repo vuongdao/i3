@@ -7,6 +7,10 @@ urxvt*saveLines:32767
 urxvt.cursorBlink:true
 urxvt*title: Terminal
 urxvt*termName:rxvt-unicode
+urxvt*imLocale: en_US.UTF-8
+urxvt.inputMethod: ibus
+urxvt.preeditType: OverTheSpot
+
 urxvt*scrollTtyKeypress:true
 urxvt*scrollTtyOutput:false
 urxvt*scrollWithBuffer:false
