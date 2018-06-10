@@ -1,7 +1,5 @@
 !xrdb -merge ~/.Xresources
 urxvt*loginShell:true
-urxvt*transpscrollbar:true
-urxvt*scrollBar_right:true
 urxvt*scrollBar:false
 urxvt*saveLines:32767
 urxvt.cursorBlink:true
@@ -10,7 +8,8 @@ urxvt*termName:rxvt-unicode
 urxvt*imLocale: en_US.UTF-8
 urxvt.inputMethod: ibus
 urxvt.preeditType: OverTheSpot
-
+urxvt*transparent: true
+urxvt*shading: 70
 urxvt*scrollTtyKeypress:true
 urxvt*scrollTtyOutput:false
 urxvt*scrollWithBuffer:false
@@ -54,7 +53,7 @@ xterm*faceSize:12
 #define _colorIT       #80d4aa
 !TXT Normal, Normal, Cursor
 #define _foreground    #dcdccc
-#define _background    #404040
+#define _background    #453a4e
 #define _cursorColor   #8faf9f
 URxvt*color0         : _color0
 URxvt*color1         : _color1
